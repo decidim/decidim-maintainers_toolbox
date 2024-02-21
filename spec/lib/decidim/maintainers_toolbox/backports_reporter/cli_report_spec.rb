@@ -100,11 +100,10 @@ describe Decidim::MaintainersToolbox::BackportsReporter::CLIReport do
           ]
         end
 
-        it "returns a valid response" do
+        it "hides row when both PRs are merged" do
           response = <<~RESPONSE
             |   ID   |                                        Title                                        | Backport v0.27 | Backport v0.26 |
             |--------|-------------------------------------------------------------------------------------|----------------|----------------|
-            | #10234 | Fix the world                                                                       |      \e[34m#9875\e[0m     |      \e[34m#9876\e[0m     |
           RESPONSE
           expect(subject).to eq response
         end
