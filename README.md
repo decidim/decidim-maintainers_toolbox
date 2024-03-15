@@ -6,12 +6,10 @@ Tools for releasing, backporting, changelog generating, and working with GitHub
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you do not plan to release to RubyGems.org.
-
 This gem is meant to be used outside of bundler/Gemfile so we do not need to bump the version every time we release a new one to each of the releases branch.
 
 ```console
-gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+gem install decidim-maintainers_toolbox
 ```
 
 ## Usage
@@ -55,13 +53,13 @@ As this gem is meant to be used outside of the main decidim gems, we will not fo
 
 To release this gem, follow these steps:
 
-. Bump the version number in `lib/decidim/maintainers_toolbox/version.rb` following [Semantic Versioning](https://semver.org/).
-. Update the `CHANGELOG.md` with the new version and the changes.
-. Commit the changes.
-. Create a new tag with the version number.
-. Push the changes and the tag to the repository.
-. Run `rake build` to build the gem.
-. Run `rake release` to publish the gem to [rubygems.org](https://rubygems.org).
+1. Bump the version number in `lib/decidim/maintainers_toolbox/version.rb` following [Semantic Versioning](https://semver.org/).
+1. Update the `CHANGELOG.md` with the new version and the changes.
+1. Commit the changes.
+1. Create a new tag with the version number.
+1. Push the changes and the tag to the repository.
+1. Run `rake build` to build the gem.
+1. Run `rake release` to publish the gem to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
