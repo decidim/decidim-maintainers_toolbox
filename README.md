@@ -23,6 +23,8 @@ There are a couple differences with the rest of the gems of this repository:
 * About the versioning: as it has not decidim nor decidim-core as dependencies, and to keep it easy to work with, we will not have the same versioning as the others gems.
 * About the ruby version: to make it possible to work with older decidim versions, we will support the lowest supported ruby version.
 
+This is the reason why its in a different repository and not in the decidim repository.
+
 The main scripts are `decidim-backporter`, `decidim-backports-checker`, `decidim-changelog-generator` and `decidim-releaser`.
 
 ### decidim-backporter
@@ -46,6 +48,20 @@ See [Releasing new versions documentation](https://docs.decidim.org/en/develop/d
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## Releases
+
+As this gem is meant to be used outside of the main decidim gems, we will not follow the same versioning. We will release a new version of this gem every time we have a new feature or bugfix that we need to use. This also means that we will not follow the same release process.
+
+To release this gem, follow these steps:
+
+. Bump the version number in `lib/decidim/maintainers_toolbox/version.rb` following [Semantic Versioning](https://semver.org/).
+. Update the `CHANGELOG.md` with the new version and the changes.
+. Commit the changes.
+. Create a new tag with the version number.
+. Push the changes and the tag to the repository.
+. Run `rake build` to build the gem.
+. Run `rake release` to publish the gem to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
