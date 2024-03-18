@@ -55,11 +55,10 @@ To release this gem, follow these steps:
 
 1. Bump the version number in `lib/decidim/maintainers_toolbox/version.rb` following [Semantic Versioning](https://semver.org/).
 1. Update the `CHANGELOG.md` with the new version and the changes.
-1. Commit the changes.
-1. Create a new tag with the version number.
-1. Push the changes and the tag to the repository.
-1. Run `rake build` to build the gem.
-1. Run `rake release` to publish the gem to [rubygems.org](https://rubygems.org).
+1. Commit the changes: `git commit -m "Prepare release v0.1.0"`
+1. Create the new tag, push the changs, build and publish with `bundle exec rake release[origin]`
+
+Mind that you will need to have the right permissions to push to the repository and publish the gem.
 
 ## Contributing
 
