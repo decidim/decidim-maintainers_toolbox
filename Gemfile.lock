@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     decidim-maintainers_toolbox (0.1.0)
+      activesupport (~> 6.1.7)
       faraday (~> 1.10)
       ruby-progressbar (~> 1.7)
       thor (~> 1.0)
@@ -81,7 +82,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activesupport (~> 6.1.7)
   decidim-maintainers_toolbox!
   rake (~> 13.0)
   rspec (~> 3.12)
