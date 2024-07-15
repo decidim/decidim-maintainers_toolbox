@@ -2,7 +2,7 @@
 
 require "open3"
 require_relative "github_manager/poster"
-require_relative "github_manager/querier/by_title"
+require_relative "github_manager/querier/by_query"
 require_relative "changelog_generator"
 
 module Decidim
@@ -248,7 +248,7 @@ You will see errors such as `No matching version found for @decidim/browserslist
       #
       # @return [Boolean] - true if there is any open PR
       def pending_crowdin_pull_requests?
-        pull_requests = Decidim::MaintainersToolbox::GithubManager::Querier::ByTitle.new(token: @token, title: "New Crowdin updates").call
+        pull_requests = Decidim::MaintainersToolbox::GithubManager::Querier::ByQuery.new(token: @token, query: { title: "New Crowdin updates", creator: "decidim-bot" }).call
         pull_requests.any?
       end
 

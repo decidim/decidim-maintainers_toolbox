@@ -15,7 +15,7 @@ module Decidim
       module Querier
         autoload :ByIssueId, "decidim/maintainers_toolbox/github_manager/querier/by_issue_id"
         autoload :ByLabel, "decidim/maintainers_toolbox/github_manager/querier/by_label"
-        autoload :ByTitle, "decidim/maintainers_toolbox/github_manager/querier/by_title"
+        autoload :ByQuery, "decidim/maintainers_toolbox/github_manager/querier/by_query"
         autoload :RelatedIssues, "decidim/maintainers_toolbox/github_manager/querier/related_issues"
       end
     end
