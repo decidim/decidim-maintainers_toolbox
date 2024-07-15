@@ -37,11 +37,15 @@ module Decidim
 
           run("git checkout #{release_branch}")
           run("git pull origin #{release_branch}")
+
           bump_decidim_version
           run("bin/rake update_versions")
+
           run("bin/rake patch_generators")
+
           run("bin/rake bundle")
           run("npm install")
+          run("bin/rake webpack") if Dir.exists?("decidim_app-design")
 
           check_tests
 
