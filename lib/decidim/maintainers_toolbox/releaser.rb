@@ -180,7 +180,7 @@ module Decidim
       # @return [void]
       def check_tests
         puts "Running specs"
-        output, status = capture("bin/rspec")
+        output, status = capture("bin/rspec", { "ENFORCED_LOCALES" => "en,ca,es", "SKIP_NORMALIZATION" => "true" })
 
         unless status.success?
           run("git restore .")
