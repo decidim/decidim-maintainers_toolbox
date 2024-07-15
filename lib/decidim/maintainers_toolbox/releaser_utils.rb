@@ -56,7 +56,7 @@ module Decidim
       # @return [void]
       def check_tests
         puts "Running specs"
-        output, status = capture("bin/rspec", { "ENFORCED_LOCALES" => "en,ca,es", "SKIP_NORMALIZATION" => "true" })
+        output, status = capture("bin/rspec", env: { "ENFORCED_LOCALES" => "en,ca,es", "SKIP_NORMALIZATION" => "true" })
 
         unless status.success?
           run("git restore .")
@@ -89,15 +89,15 @@ module Decidim
           title: "Bump to v#{version_number} version",
           body: "#### :tophat: What? Why?
 
-          This PR prepares version of the #{release_branch} branch, so we can publish the release once this is approved and merged.
+This PR prepares version of the #{release_branch} branch, so we can publish the release once this is approved and merged.
 
-          #### Testing
+#### Testing
 
-          All the tests should pass, except for some generators tests, that will fail because the gems and NPM packages have not
-          been actually published yet (as in sent to rubygems/npm).
-          You will see errors such as `No matching version found for @decidim/browserslist-config@~0.xx.y` in the CI logs.
+All the tests should pass, except for some generators tests, that will fail because the gems and NPM packages have not
+been actually published yet (as in sent to rubygems/npm).
+You will see errors such as `No matching version found for @decidim/browserslist-config@~0.xx.y` in the CI logs.
 
-          :hearts: Thank you!
+:hearts: Thank you!
           ",
           labels: ["type: internal"],
           head: head_branch,

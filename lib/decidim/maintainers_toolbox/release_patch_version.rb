@@ -19,6 +19,40 @@ module Decidim
       end
 
       def call
+        exit_unless_release_branch
+
+        prepare_next_patch_version
+      end
+
+      # The version number for the release that we are preparing
+      #
+      # @return [String] the version number
+      def version_number
+        @version_number ||= next_version_number_for_patch_release(old_version_number)
+      end
+
+      private
+
+      # Raise an error if the branch does not start with the preffix "release/"
+      # or returns the branch name
+      #
+      # @raise [InvalidBranchError]
+      #
+      # @return [String]
+      def release_branch
+        @release_branch ||= branch
+      end
+
+      def exit_unless_release_branch
+        return if branch.start_with?("release/")
+
+        error_message = <<-EOERROR
+        This is not a release branch, change to the release branch branch to run this script.
+        EOERROR
+        exit_with_errors(error_message)
+      end
+
+      def prepare_next_patch_version
         run("git checkout #{release_branch}")
         run("git pull origin #{release_branch}")
 
@@ -42,53 +76,11 @@ module Decidim
         create_pull_request
       end
 
-      # The version number for the release that we are preparing
-      #
-      # @return [String] the version number
-      def version_number
-        next_version_number_for_patch_release(old_version_number)
-      end
-
-      private
-
-      # The git branch
-      #
-      # @return [String]
-      def branch
-        @branch ||= capture("git rev-parse --abbrev-ref HEAD")[0].strip
-      end
-
-      # Raise an error if the branch does not start with the preffix "release/"
-      # or returns the branch name
-      #
-      # @raise [InvalidBranchError]
-      #
-      # @return [String]
-      def release_branch
-        raise InvalidBranchError, "This is not a release branch, aborting" unless branch.start_with?("release/")
-
-        branch
-      end
-
       # Changes the decidim version in the file
       #
       # @return [void]
       def bump_decidim_version
         File.write(DECIDIM_VERSION_FILE, version_number)
-      end
-
-      # Run the tests and if fails restore the changes using git and exit with an error
-      #
-      # @return [void]
-      def check_tests
-        puts "Running specs"
-        output, status = capture("bin/rspec", { "ENFORCED_LOCALES" => "en,ca,es", "SKIP_NORMALIZATION" => "true" })
-
-        unless status.success?
-          run("git restore .")
-          puts output
-          exit_with_errors("Tests execution failed. Fix the errors and run again.")
-        end
       end
 
       # Given a version number, returns the next patch release
