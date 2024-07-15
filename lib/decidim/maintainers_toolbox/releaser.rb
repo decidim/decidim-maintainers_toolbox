@@ -30,6 +30,8 @@ module Decidim
           exit_if_pending_crowdin_pull_request
 
           case @version_type
+          when "rc"
+            release = ReleaseCandidateVersion.new(token: @token, working_dir: @working_dir)
           when "patch"
             release = ReleasePatchVersion.new(token: @token, working_dir: @working_dir)
           else
