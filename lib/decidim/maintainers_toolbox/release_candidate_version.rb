@@ -154,6 +154,7 @@ module Decidim
         4. Usually, at this point, the release branch is deployed to Metadecidim during, at least, one week to validate the stability of the version.
         EOMESSAGE
 
+        puts "*" * 80
         puts finish_message
       end
 
