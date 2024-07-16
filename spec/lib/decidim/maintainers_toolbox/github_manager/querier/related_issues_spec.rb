@@ -3,7 +3,7 @@
 require "decidim/maintainers_toolbox/github_manager/querier"
 require "webmock/rspec"
 
-describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssues do
+RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssues do
   let(:querier) { described_class.new(token: "abc", issue_id: 12_345) }
   let(:response) do
     [
