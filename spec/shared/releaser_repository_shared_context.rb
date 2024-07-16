@@ -26,5 +26,4 @@ RSpec.shared_context "releaser repository" do
     Dir.chdir(working_dir)
     FileUtils.rm_r(Dir.glob(tmp_repository_dir))
   end
-
 end
