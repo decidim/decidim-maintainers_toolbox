@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require "open3"
-require_relative "github_manager/poster"
-require_relative "github_manager/querier/by_query"
-require_relative "changelog_generator"
 require_relative "releaser_utils"
 
 module Decidim

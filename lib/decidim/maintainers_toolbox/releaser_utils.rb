@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "open3"
+require_relative "changelog_generator"
+require_relative "github_manager/poster"
 
 module Decidim
   module MaintainersToolbox

@@ -2,6 +2,7 @@
 
 require_relative "changelog_generator"
 require_relative "releaser_utils"
+require_relative "github_manager/poster"
 
 module Decidim
   module MaintainersToolbox
