@@ -9,7 +9,7 @@ module Decidim
         # Makes a GET request for the list of Issues or Pull Requests in GitHub.
         #
         # @param token [String] token for GitHub authentication
-        # @pparam query [Hash] the query to search
+        # @param query [Hash] the query to search
         #
         # @see https://docs.github.com/en/rest/issues/issues#list-repository-issues GitHub API documentation
         class ByQuery < Decidim::MaintainersToolbox::GithubManager::Querier::Base
