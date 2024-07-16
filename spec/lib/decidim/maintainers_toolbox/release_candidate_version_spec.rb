@@ -42,4 +42,22 @@ RSpec.describe Decidim::MaintainersToolbox::ReleaseCandidateVersion do
       end
     end
   end
+
+  context "if this is release branch with a patch version" do
+    let(:decidim_version) { "0.99.0" }
+    let(:release_branch) { "release/0.99-stable" }
+
+    it "exits" do
+      expect { subject.call }.to raise_error SystemExit
+    end
+  end
+
+  context "if this is feature branch" do
+    let(:decidim_version) { "0.99.0.rc1" }
+    let(:release_branch) { "feature/fix-my-street" }
+
+    it "exits" do
+      expect { subject.call }.to raise_error SystemExit
+    end
+  end
 end

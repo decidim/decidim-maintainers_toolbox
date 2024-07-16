@@ -6,8 +6,8 @@ RSpec.shared_context "releaser repository" do
   let(:release_branch) { "release/0.99-stable" }
 
   before do
-    FileUtils.mkdir_p("#{tmp_repository_dir}/code")
-    Dir.chdir("#{tmp_repository_dir}/code")
+    FileUtils.mkdir_p("#{tmp_repository_dir}")
+    Dir.chdir("#{tmp_repository_dir}")
     `
       git init --initial-branch=develop .
       git config user.email "decidim_releaser@example.com"

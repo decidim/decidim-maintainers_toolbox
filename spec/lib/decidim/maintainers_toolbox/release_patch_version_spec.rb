@@ -42,4 +42,14 @@ RSpec.describe Decidim::MaintainersToolbox::ReleasePatchVersion do
       end
     end
   end
+
+  context "if this is not a release branch" do
+    it "exits" do
+      `
+      git switch --quiet develop
+      `
+
+      expect { subject.call }.to raise_error SystemExit
+    end
+  end
 end

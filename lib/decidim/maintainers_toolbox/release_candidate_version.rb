@@ -66,7 +66,7 @@ module Decidim
       end
 
       def dev_version_number?
-        version_number.match? /dev$/
+        @old_version_number.match? /dev$/
       end
 
       def release_branch?
@@ -74,7 +74,7 @@ module Decidim
       end
 
       def rc_version_number?
-        version_number.match? /rc.$/
+        @old_version_number.match? /rc.$/
       end
 
       def prepare_next_development_version

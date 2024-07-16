@@ -13,4 +13,12 @@ RSpec.describe Decidim::MaintainersToolbox::Releaser do
   let(:tmp_repository_dir) { "/tmp/decidim-releaser-test-#{rand(1_000)}" }
 
   include_context "releaser repository"
+
+  context "if there are unstaged changes" do
+    it "exits" do
+      `echo hello_world.txt > a_file.txt`
+
+      expect { subject.call }.to raise_error SystemExit
+    end
+  end
 end
