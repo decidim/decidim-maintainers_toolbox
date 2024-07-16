@@ -29,4 +29,44 @@ RSpec.describe Decidim::MaintainersToolbox::ReleaserUtils do
       expect(new_version_number).to eq("0.99.0.rc2")
     end
   end
+
+  describe "#branch" do
+    it "returns the correct branch" do
+      expect(subject.send(:branch)).to eq release_branch
+    end
+  end
+
+  describe "#parsed_version_number" do
+    context "when it is a dev version" do
+      let(:version_number) { "1.2.3.dev" }
+
+      it "parses the version number" do
+        expect(subject.send(:parsed_version_number, version_number)).to eq([1, 2, 3])
+      end
+    end
+
+    context "when it is a release candidate version" do
+      let(:version_number) { "1.2.3.rc1" }
+
+      it "parses the version number" do
+        expect(subject.send(:parsed_version_number, version_number)).to eq([1, 2, 3])
+      end
+    end
+
+    context "when it is a patch version" do
+      let(:version_number) { "1.2.3" }
+
+      it "parses the version number" do
+        expect(subject.send(:parsed_version_number, version_number)).to eq([1, 2, 3])
+      end
+    end
+  end
+
+  describe "#old_version_number" do
+    let(:decidim_version) { "0.1.0" }
+
+    it "returns the correct version number" do
+      expect(subject.send(:old_version_number)).to eq "0.1.0"
+    end
+  end
 end
