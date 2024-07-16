@@ -30,7 +30,7 @@ module Decidim
       #
       # @return [void]
       def run(cmd, out: $stdout)
-        system(cmd, out: out)
+        system(cmd, out: out, exception: true)
       end
 
       # The git branch
