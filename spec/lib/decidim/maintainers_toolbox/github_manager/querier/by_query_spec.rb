@@ -3,12 +3,12 @@
 require "decidim/maintainers_toolbox/github_manager/querier"
 require "webmock/rspec"
 
-describe Decidim::MaintainersToolbox::GithubManager::Querier::ByTitle do
-  let(:querier) { described_class.new(token: "abc", title: title, state: state) }
-  let(:title) { "Fix whatever" }
-  let(:state) { "open" }
+describe Decidim::MaintainersToolbox::GithubManager::Querier::ByQuery do
+  let(:querier) { described_class.new(token: @token, query: { title: "Fix whatever" }) }
 
-  let(:stubbed_url) { "https://api.github.com/repos/decidim/decidim/issues?per_page=100&state=open&title=Fix%20whatever" }
+  let(:title) { "Fix whatever" }
+
+  let(:stubbed_url) { "https://api.github.com/repos/decidim/decidim/issues?per_page=100&title=Fix%20whatever" }
   let(:stubbed_headers) { {} }
 
   before do

@@ -2,7 +2,7 @@
 
 require "open3"
 require_relative "github_manager/poster"
-require_relative "github_manager/querier/by_title"
+require_relative "github_manager/querier/by_query"
 require_relative "changelog_generator"
 
 module Decidim
@@ -37,11 +37,15 @@ module Decidim
 
           run("git checkout #{release_branch}")
           run("git pull origin #{release_branch}")
+
           bump_decidim_version
           run("bin/rake update_versions")
+
           run("bin/rake patch_generators")
+
           run("bin/rake bundle")
           run("npm install")
+          run("bin/rake webpack") if Dir.exists?("decidim_app-design")
 
           check_tests
 
@@ -176,7 +180,7 @@ module Decidim
       # @return [void]
       def check_tests
         puts "Running specs"
-        output, status = capture("bin/rspec")
+        output, status = capture("bin/rspec", { "ENFORCED_LOCALES" => "en,ca,es", "SKIP_NORMALIZATION" => "true" })
 
         unless status.success?
           run("git restore .")
@@ -244,7 +248,7 @@ You will see errors such as `No matching version found for @decidim/browserslist
       #
       # @return [Boolean] - true if there is any open PR
       def pending_crowdin_pull_requests?
-        pull_requests = Decidim::MaintainersToolbox::GithubManager::Querier::ByTitle.new(token: @token, title: "New Crowdin updates").call
+        pull_requests = Decidim::MaintainersToolbox::GithubManager::Querier::ByQuery.new(token: @token, query: { title: "New Crowdin updates", creator: "decidim-bot" }).call
         pull_requests.any?
       end
 

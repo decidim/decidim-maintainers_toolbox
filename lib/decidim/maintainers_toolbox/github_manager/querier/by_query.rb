@@ -9,15 +9,13 @@ module Decidim
         # Makes a GET request for the list of Issues or Pull Requests in GitHub.
         #
         # @param token [String] token for GitHub authentication
-        # @param title [String] the title that we want to search by
-        # @param state [String] the state of the issue. By default is "open"
+        # @param query [Hash] the query to search
         #
         # @see https://docs.github.com/en/rest/issues/issues#list-repository-issues GitHub API documentation
-        class ByTitle < Decidim::MaintainersToolbox::GithubManager::Querier::Base
-          def initialize(title:, token:, state: "open")
-            @title = title
+        class ByQuery < Decidim::MaintainersToolbox::GithubManager::Querier::Base
+          def initialize(token:, query: {})
             @token = token
-            @state = state
+            @query = query
           end
 
           # Makes the GET request and parses the response of an Issue or Pull Request in GitHub
@@ -31,14 +29,12 @@ module Decidim
 
           private
 
-          attr_reader :title, :state
+          attr_reader :query
 
           def headers
             {
-              title: title,
-              state: state,
               per_page: 100
-            }
+            }.merge(query)
           end
 
           # Parses the response of an Issue or Pull Request in GitHub
