@@ -52,7 +52,7 @@ module Decidim
         run("git checkout #{release_branch}")
         run("git pull origin #{release_branch}")
 
-        bump_decidim_version
+        bump_decidim_version(version_number)
         run("bin/rake update_versions")
 
         run("bin/rake patch_generators")
@@ -70,13 +70,6 @@ module Decidim
         run("git push origin chore/prepare/#{version_number}")
 
         create_pull_request
-      end
-
-      # Changes the decidim version in the file
-      #
-      # @return [void]
-      def bump_decidim_version
-        File.write(DECIDIM_VERSION_FILE, version_number)
       end
 
       # Given a version number, returns the next patch release

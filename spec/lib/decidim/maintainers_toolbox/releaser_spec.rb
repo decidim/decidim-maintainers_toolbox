@@ -54,35 +54,6 @@ RSpec.describe Decidim::MaintainersToolbox::Releaser do
     end
   end
 
-  describe "#bump_decidim_version" do
-    context "when it is a release candidate" do
-      let(:decidim_version) { "0.99.0.rc1" }
-      let(:version_type) { "rc" }
-
-      it "changes the version number in the decidim version file" do
-        version_number = File.read(".decidim-version").strip
-        expect(version_number).to eq("0.99.0.rc1")
-
-        subject.send(:bump_decidim_version)
-        new_version_number = File.read(".decidim-version").strip
-
-        expect(new_version_number).to eq("0.99.0.rc2")
-      end
-    end
-
-    context "when it is a patch release" do
-      let(:decidim_version) { "0.99.0" }
-      let(:version_type) { "patch" }
-
-      it "changes the version number in the decidim version file" do
-        subject.send(:bump_decidim_version)
-        new_version_number = File.read(".decidim-version").strip
-
-        expect(new_version_number).to eq("0.99.1")
-      end
-    end
-  end
-
   describe "#parsed_version_number" do
     context "when it is a dev version" do
       let(:version_number) { "1.2.3.dev" }

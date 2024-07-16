@@ -107,6 +107,13 @@ You will see errors such as `No matching version found for @decidim/browserslist
         }
         Decidim::MaintainersToolbox::GithubManager::Poster.new(token: @token, params: params).call
       end
+
+      # Changes the decidim version in the file
+      #
+      # @return [void]
+      def bump_decidim_version(new_version_number)
+        File.write(DECIDIM_VERSION_FILE, new_version_number)
+      end
     end
   end
 end

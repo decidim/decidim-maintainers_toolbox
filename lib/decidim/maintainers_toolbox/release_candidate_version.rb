@@ -71,7 +71,7 @@ module Decidim
         prepare_branch = "chore/prepare/#{next_dev_version}"
         run("git checkout -b #{prepare_branch}")
 
-        bump_decidim_version_dev
+        bump_decidim_version(next_version_number_for_dev(@old_version_number))
 
         run("bin/rake update_versions")
         run("bin/rake patch_generators")
@@ -93,7 +93,7 @@ module Decidim
         run("git checkout #{release_branch}")
         run("git checkout -b chore/prepare/#{version_number}")
 
-        bump_decidim_version
+        bump_decidim_version(version_number)
 
         run("bin/rake update_versions")
         run("bin/rake patch_generators")
@@ -165,13 +165,6 @@ module Decidim
         major, minor, patch = parsed_version_number(current_version_number)
 
         "#{major}.#{minor.to_i + 1}.#{patch}.dev"
-      end
-
-      # Changes the decidim version in the file
-      #
-      # @return [void]
-      def bump_decidim_version_dev
-        File.write(DECIDIM_VERSION_FILE, next_version_number_for_dev(@old_version_number))
       end
 
       def generate_empty_changelog
@@ -266,13 +259,6 @@ result = 1 + 1 if after
 EORELEASE
 
         File.write("RELEASE_NOTES.md", release_notes_contents)
-      end
-
-      # Changes the decidim version in the file
-      #
-      # @return [void]
-      def bump_decidim_version
-        File.write(DECIDIM_VERSION_FILE, version_number)
       end
 
       # Creates the pull request for bumping the develop version
