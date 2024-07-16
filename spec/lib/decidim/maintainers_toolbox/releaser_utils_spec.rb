@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "decidim/maintainers_toolbox/releaser"
+require_relative "../../../shared/releaser_repository_shared_context"
 
 RSpec.describe Decidim::MaintainersToolbox::ReleaserUtils do
 
@@ -13,32 +14,9 @@ RSpec.describe Decidim::MaintainersToolbox::ReleaserUtils do
     klass
   end
 
-  let(:working_dir) { File.expand_path("../../..", __dir__) }
   let(:tmp_repository_dir) { "/tmp/decidim-releaser-utils-test-#{rand(1_000)}" }
-  let(:decidim_version) { "0.99.0.rc1" }
-  let(:release_branch) { "release/0.99-stable" }
 
-  before do
-    FileUtils.mkdir_p("#{tmp_repository_dir}/code")
-    Dir.chdir("#{tmp_repository_dir}/code")
-    `
-      git init --initial-branch=develop .
-      git config user.email "decidim_releaser@example.com"
-      git config user.name "Decidim::ReleaserUtils test"
-
-      touch a_file.txt && git add a_file.txt
-      echo #{decidim_version} > .decidim-version && git add .decidim-version
-      git commit -m "Initial commit (#1234)"
-
-      git branch #{release_branch}
-      git switch --quiet #{release_branch}
-    `
-  end
-
-  after do
-    Dir.chdir(working_dir)
-    FileUtils.rm_r(Dir.glob(tmp_repository_dir))
-  end
+  include_context "releaser repository"
 
   describe "#bump_decidim_version" do
     it "writes the file" do

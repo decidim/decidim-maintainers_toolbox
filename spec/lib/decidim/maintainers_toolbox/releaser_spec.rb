@@ -1,39 +1,18 @@
 # frozen_string_literal: true
 
 require "decidim/maintainers_toolbox/releaser"
+require_relative "../../../shared/releaser_repository_shared_context"
 
 RSpec.describe Decidim::MaintainersToolbox::Releaser do
   subject { described_class.new(token: token, version_type: version_type, exit_with_unstaged_changes: exit_with_unstaged_changes, working_dir: tmp_repository_dir) }
 
   let(:token) { "1234" }
   let(:version_type) { "patch" }
-  let(:release_branch) { "release/0.99-stable" }
-  let(:tmp_repository_dir) { "/tmp/decidim-releaser-test-#{rand(1_000)}" }
-  let(:working_dir) { File.expand_path("../../..", __dir__) }
   let(:exit_with_unstaged_changes) { true }
-  let(:decidim_version) { "0.99.0.rc1" }
 
-  before do
-    FileUtils.mkdir_p("#{tmp_repository_dir}/code")
-    Dir.chdir("#{tmp_repository_dir}/code")
-    `
-      git init --initial-branch=develop .
-      git config user.email "decidim_releaser@example.com"
-      git config user.name "Decidim::Releaser test"
+  let(:tmp_repository_dir) { "/tmp/decidim-releaser-test-#{rand(1_000)}" }
 
-      touch a_file.txt && git add a_file.txt
-      echo #{decidim_version} > .decidim-version && git add .decidim-version
-      git commit -m "Initial commit (#1234)"
-
-      git branch #{release_branch}
-      git switch --quiet #{release_branch}
-    `
-  end
-
-  after do
-    Dir.chdir(working_dir)
-    FileUtils.rm_r(Dir.glob(tmp_repository_dir))
-  end
+  include_context "releaser repository"
 
   describe "#branch" do
     it "returns the correct branch" do
