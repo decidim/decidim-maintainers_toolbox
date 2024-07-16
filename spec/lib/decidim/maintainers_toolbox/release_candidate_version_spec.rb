@@ -16,6 +16,30 @@ RSpec.describe Decidim::MaintainersToolbox::ReleaseCandidateVersion do
       expect(subject.send(:release_branch)).to eq release_branch
     end
   end
+
+  describe "#next_version_number_for_release_candidate" do
+    context "when it is a dev version" do
+      let(:version_number) { "0.1.0.dev" }
+
+      it "returns the first release candidate" do
+        expect(subject.send(:next_version_number_for_release_candidate, version_number)).to eq "0.1.0.rc1"
+      end
+    end
+
+    context "when it is a release candidate version" do
+      let(:version_number) { "0.1.0.rc1" }
+
+      it "returns the correct next version number" do
+        expect(subject.send(:next_version_number_for_release_candidate, version_number)).to eq "0.1.0.rc2"
+      end
+    end
+
+    context "when it is a patch version" do
+      let(:version_number) { "0.1.0" }
+
+      it "raises an error" do
+        expect { subject.send(:next_version_number_for_release_candidate, version_number) }.to raise_error(Decidim::MaintainersToolbox::ReleaserUtils::InvalidVersionTypeError)
+      end
+    end
+  end
 end
-
-
