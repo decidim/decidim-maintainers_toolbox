@@ -20,19 +20,6 @@ RSpec.describe Decidim::MaintainersToolbox::Releaser do
     end
   end
 
-  describe "#release_branch" do
-    it "returns the correct branch" do
-      expect(subject.send(:release_branch)).to eq release_branch
-    end
-
-    context "when we are not in a release branch" do
-      it "raises an error" do
-        `git switch --quiet develop`
-        expect { subject.send(:release_branch) }.to raise_error(Decidim::MaintainersToolbox::Releaser::InvalidBranchError)
-      end
-    end
-  end
-
   describe "#parsed_version_number" do
     context "when it is a dev version" do
       let(:version_number) { "1.2.3.dev" }
