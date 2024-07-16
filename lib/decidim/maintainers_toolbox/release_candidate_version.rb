@@ -6,6 +6,11 @@ require_relative "github_manager/poster"
 
 module Decidim
   module MaintainersToolbox
+    # Creates a release candidate version for this branch
+    #
+    # If we are in develop (i.e. v0.30.0.dev) it will create the rc1 (i.e. v0.30.0.rc1)
+    # If we are in the stable release with an rc (i.e. v0.30.0.rc1) it will create the next rc (i.e. v0.30.0.rc2)
+    # If we are in the stable release with a patch (i.e. v0.30.0) it will bail out
     class ReleaseCandidateVersion
       include Decidim::MaintainersToolbox::ReleaserUtils
 
@@ -18,7 +23,7 @@ module Decidim
       end
 
       def call
-        exit_unless_develop
+        check_branch_and_version_sanity
 
         prepare_next_development_version
         prepare_next_release_candidate_version
@@ -44,16 +49,37 @@ module Decidim
         end
       end
 
-      def exit_unless_develop
-        return if branch == "develop"
+      def check_branch_and_version_sanity
+        return if develop_branch? && dev_version_number?
+        return if release_branch? && rc_version_number?
 
         error_message = <<-EOERROR
-        This is not the develop branch, change to the develop branch to run this script.
+        Check if the branch is valid for a release candidate. It should be: 
+        - develop with a dev version (i.e. develop branch with 0.30.0.dev decidim version)
+        - stable branch with a release candidate version (i.e. release/0.30-stable branch with 0.30.rc1 decidim version)
         EOERROR
         exit_with_errors(error_message)
       end
 
+      def develop_branch?
+        branch == "develop"
+      end
+
+      def dev_version_number?
+        version_number.match? /dev$/
+      end
+
+      def release_branch?
+        branch.start_with?("release/")
+      end
+
+      def rc_version_number?
+        version_number.match? /rc.$/
+      end
+
       def prepare_next_development_version
+        return unless develop_branch? || dev_version_number?
+
         run("git pull origin develop")
 
         run("git checkout -b #{release_branch}")
