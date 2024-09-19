@@ -96,7 +96,6 @@ module Decidim
         puts "Cherrypicking commit #{sha_commit}"
         `git cherry-pick #{sha_commit}`
 
-        exit_with_errors(error_message)
         unless $CHILD_STATUS.exitstatus.zero?
           error_message = "Resolve the cherrypick conflict manually and exit your shell to keep with the process."
 

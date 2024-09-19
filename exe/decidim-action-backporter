@@ -14,7 +14,6 @@ class ActionBackporterCLI < Thor
     Required. Github Personal Access Token (PAT). It can be obtained from https://github.com/settings/tokens/new. You will need to create one with `public_repo` access.
     Alternatively, you can use the `gh` CLI tool to authenticate with `gh auth token` (i.e. --github-token=$(gh auth token))
   HELP
-  # option :version_number, required: true, desc: "Required. The version number that you want to do the backport to. It must have the format MAJOR.MINOR."
   option :pull_request_id, required: true, desc: "Required. The ID of the pull request that you want to make the backport from. It should have the \"type: fix\" label."
   option :exit_with_unstaged_changes, type: :boolean, default: true, desc: <<~HELP
     Optional. Whether the script should exit with an error if there are unstaged changes in the current project.
@@ -27,13 +26,6 @@ class ActionBackporterCLI < Thor
       pull_request_id: options[:pull_request_id],
       exit_with_unstaged_changes: options[:exit_with_unstaged_changes]
     ).call
-
-  #   Decidim::MaintainersToolbox::Backporter.new(
-  #     token: options[:github_token],
-  #     pull_request_id: options[:pull_request_id],
-  #     version_number: options[:version_number],
-  #     exit_with_unstaged_changes: options[:exit_with_unstaged_changes]
-  #   ).call
   rescue Decidim::MaintainersToolbox::GithubManager::Querier::Base::InvalidMetadataError
     puts "Metadata was not returned from the server. Please check that the provided pull request ID and GitHub token are correct."
   end
