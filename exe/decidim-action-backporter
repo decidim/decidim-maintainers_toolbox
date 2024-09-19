@@ -4,8 +4,6 @@
 require "thor"
 
 require_relative "../lib/decidim/maintainers_toolbox/github_manager/querier"
-require_relative "../lib/decidim/maintainers_toolbox/github_manager/poster"
-require_relative "../lib/decidim/maintainers_toolbox/git_backport_manager"
 require_relative "../lib/decidim/maintainers_toolbox/action_backporter"
 
 class ActionBackporterCLI < Thor

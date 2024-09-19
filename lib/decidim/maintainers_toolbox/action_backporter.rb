@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require_relative "github_manager/querier"
+require_relative "github_manager/poster"
+require_relative "git_backport_manager"
+
 module Decidim
   module MaintainersToolbox
     class ActionBackporter
@@ -15,18 +19,17 @@ module Decidim
       end
 
       def call
-        pp pull_request_metadata
-
         exit_with_errors("The requested PR #{pull_request_id} does not contain `type: fix`") unless pull_request_metadata[:labels].include?("type: fix")
         exit_with_errors("The requested PR #{pull_request_id} is not merged") unless pull_request_metadata[:is_merged]
         exit_with_errors("The requested PR #{pull_request_id} cannot be backported") if pull_request_metadata[:labels].include?("no-backport")
 
-        #
-        # extract_versions.each do |version|
-        #   next if extract_backport_pull_request_for_version(related_issues, version)
-        #   # `decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=#{version} --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false`
-        #   # create_backport_task(version) unless $CHILD_STATUS.exitstatus.zero?
-        # end
+        extract_versions.each do |version|
+          next if extract_backport_pull_request_for_version(related_issues, version)
+          system("decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=#{version} --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false", exception: true)
+        rescue RuntimeError => e
+          puts e.message
+          create_backport_task(version)
+        end
       end
 
       private
@@ -34,10 +37,9 @@ module Decidim
       attr_reader :token, :pull_request_id, :exit_with_unstaged_changes
 
       def create_backport_task(version)
-        pp pull_request_metadata
         some_params = {
-          title: "Backport of \"#{pull_request_metadata[:title]}\" failed for version #{version}",
-          body: "Backport of ##{pull_request_id} failed for version #{version}",
+          title: "Fail: automatic backport of \"#{pull_request_metadata[:title]}\"",
+          body: "Automatic backport of ##{pull_request_id} has failed for version #{version}. Please do this action manually.",
           assignee: "alecslupu",
           labels: pull_request_metadata[:labels]
         }
