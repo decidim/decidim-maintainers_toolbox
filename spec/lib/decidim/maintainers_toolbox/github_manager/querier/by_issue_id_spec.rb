@@ -8,22 +8,91 @@ describe Decidim::MaintainersToolbox::GithubManager::Querier::ByIssueId do
 
   before do
     stub_request(:get, "https://api.github.com/repos/decidim/decidim/issues/12345")
-      .to_return(status: 200, body: '{"number": 12345, "title": "Fix whatever", "labels": [{"name": "type: fix"}, {"name": "module: admin"}]}', headers: {})
+      .to_return(status: 200, body: body, headers: {})
   end
 
   describe ".call" do
-    let(:response) do
-      {
-        labels: ["module: admin", "type: fix"],
-        modules: ["module: admin"],
-        type: ["type: fix"],
-        id: 12_345,
-        title: "Fix whatever"
-      }
+    context "when ticket is an issue" do
+      let(:body) { '{"number": 12345, "title": "Fix whatever", "labels": [{"name": "type: fix"}, {"name": "module: admin"}]}' }
+      let(:response) do
+        {
+          labels: ["module: admin", "type: fix"],
+          modules: ["module: admin"],
+          type: ["type: fix"],
+          id: 12_345,
+          state: nil,
+          is_merged: false,
+          is_pull_request: false,
+          title: "Fix whatever"
+        }
+      end
+
+      it "returns a valid response" do
+        expect(querier.call).to eq response
+      end
     end
 
-    it "returns a valid response" do
-      expect(querier.call).to eq response
+    context "when issue is a PR" do
+      context "when merged" do
+        let(:body) { '{"number": 12345, "pull_request": {"merged_at": "2024-09-19T08:08:50Z" }, "title": "Fix whatever", "labels": [{"name": "type: fix"}, {"name": "module: admin"}]}' }
+        let(:response) do
+          {
+            labels: ["module: admin", "type: fix"],
+            modules: ["module: admin"],
+            type: ["type: fix"],
+            id: 12_345,
+            state: nil,
+            is_merged: true,
+            is_pull_request: true,
+            title: "Fix whatever"
+          }
+        end
+
+        it "returns a valid response" do
+          expect(querier.call).to eq response
+        end
+      end
+
+      context "when closed" do
+        let(:body) { '{"number": 12345, "pull_request": {"merged_at": "" }, "title": "Fix whatever", "labels": [{"name": "type: fix"}, {"name": "module: admin"}]}' }
+        let(:response) do
+          {
+            labels: ["module: admin", "type: fix"],
+            modules: ["module: admin"],
+            type: ["type: fix"],
+            id: 12_345,
+            state: nil,
+            is_merged: false,
+            is_pull_request: true,
+            title: "Fix whatever"
+          }
+        end
+
+        it "returns a valid response" do
+          expect(querier.call).to eq response
+        end
+      end
+
+      context "when active" do
+        let(:body) { '{"number": 12345, "pull_request": {"merged_at": "" }, "title": "Fix whatever", "labels": [{"name": "type: fix"}, {"name": "module: admin"}]}' }
+        let(:response) do
+          {
+            labels: ["module: admin", "type: fix"],
+            modules: ["module: admin"],
+            type: ["type: fix"],
+            id: 12_345,
+            state: nil,
+            is_merged: false,
+            is_pull_request: true,
+            title: "Fix whatever"
+          }
+        end
+
+        it "returns a valid response" do
+          expect(querier.call).to eq response
+        end
+      end
     end
+
   end
 end

@@ -14,12 +14,13 @@ module Decidim
       # @param backport_branch [String] the name of the branch that we want to create
       # @param working_dir [String] current working directory. Useful for testing purposes
       # @param exit_with_unstaged_changes [Boolean] wheter we should exit cowardly if there is any unstaged change
-      def initialize(pull_request_id:, release_branch:, backport_branch:, working_dir: Dir.pwd, exit_with_unstaged_changes: false)
+      def initialize(pull_request_id:, release_branch:, backport_branch:, working_dir: Dir.pwd, exit_with_unstaged_changes: false, with_console: true)
         @pull_request_id = pull_request_id
         @release_branch = release_branch
         @backport_branch = sanitize_branch(backport_branch)
         @working_dir = working_dir
         @exit_with_unstaged_changes = exit_with_unstaged_changes
+        @with_console = with_console
       end
 
       # Handles all the different tasks involved on a backport with the git command line utility
@@ -64,7 +65,7 @@ module Decidim
 
       private
 
-      attr_reader :pull_request_id, :release_branch, :backport_branch, :working_dir
+      attr_reader :pull_request_id, :release_branch, :backport_branch, :working_dir, :with_console
 
       # Create the backport branch based on a release branch
       # Checks that this branch does not exist already, if it does then exits
@@ -96,8 +97,14 @@ module Decidim
         `git cherry-pick #{sha_commit}`
 
         unless $CHILD_STATUS.exitstatus.zero?
-          puts "Resolve the cherrypick conflict manually and exit your shell to keep with the process."
-          system ENV.fetch("SHELL")
+          error_message = "Resolve the cherrypick conflict manually and exit your shell to keep with the process."
+
+          if with_console
+            puts error_message
+            system ENV.fetch("SHELL")
+          else
+            exit_with_errors(error_message)
+          end
         end
       end
 
