@@ -83,8 +83,8 @@ describe Decidim::MaintainersToolbox::ActionBackporter do
 
       allow(subject).to receive(:system).and_raise(RuntimeError)
 
-      expect(subject).to receive(:create_backport_task).with("0.28")
-      expect(subject).to receive(:create_backport_task).with("0.29")
+      expect(subject).to receive(:create_backport_issue).with("0.28")
+      expect(subject).to receive(:create_backport_issue).with("0.29")
 
       subject.call
     end
@@ -111,7 +111,7 @@ describe Decidim::MaintainersToolbox::ActionBackporter do
     end
 
     it "returns the respose from the server" do
-      expect(subject.send(:create_backport_task, "0.29")).to be_a Faraday::Response
+      expect(subject.send(:create_backport_issue, "0.29")).to be_a Faraday::Response
     end
   end
 

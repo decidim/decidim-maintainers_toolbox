@@ -9,6 +9,8 @@ module Decidim
     class ActionBackporter
       class InvalidMetadataError < StandardError; end
 
+      DECIDIM_MAINTAINERS = ["alecslupu", "andreslucena"]
+
       # @param token [String] token for GitHub authentication
       # @param pull_request_id [String] the ID of the pull request that we want to backport
       # @param exit_with_unstaged_changes [Boolean] wheter we should exit cowardly if there is any unstaged change
@@ -28,7 +30,7 @@ module Decidim
           system("decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=#{version} --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false", exception: true)
         rescue RuntimeError => e
           puts e.message
-          create_backport_task(version)
+          create_backport_issue(version)
         end
       end
 
@@ -40,7 +42,7 @@ module Decidim
         some_params = {
           title: "Fail: automatic backport of \"#{pull_request_metadata[:title]}\"",
           body: "Automatic backport of ##{pull_request_id} has failed for version #{version}. Please do this action manually.",
-          assignee: "alecslupu",
+          assignee: DECIDIM_MAINTAINERS,
           labels: pull_request_metadata[:labels]
         }
 
