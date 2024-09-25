@@ -36,7 +36,7 @@ module Decidim
 
       attr_reader :token, :pull_request_id, :exit_with_unstaged_changes
 
-      def create_backport_task(version)
+      def create_backport_issue(version)
         some_params = {
           title: "Fail: automatic backport of \"#{pull_request_metadata[:title]}\"",
           body: "Automatic backport of ##{pull_request_id} has failed for version #{version}. Please do this action manually.",

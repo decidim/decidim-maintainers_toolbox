@@ -7,7 +7,7 @@ require_relative "../lib/decidim/maintainers_toolbox/github_manager/querier"
 require_relative "../lib/decidim/maintainers_toolbox/action_backporter"
 
 class ActionBackporterCLI < Thor
-  desc "", "Backport a pull request to another branch"
+  desc "", "Backport a pull request to another branch. This is intended to be run in the GitHub Action environment, for automating the backport processes."
   option :github_token, required: true, desc: <<~HELP
     Required. Github Personal Access Token (PAT). It can be obtained from https://github.com/settings/tokens/new. You will need to create one with `public_repo` access.
     Alternatively, you can use the `gh` CLI tool to authenticate with `gh auth token` (i.e. --github-token=$(gh auth token))
