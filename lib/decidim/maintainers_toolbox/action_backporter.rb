@@ -28,6 +28,9 @@ module Decidim
         extract_versions.each do |version|
           next if extract_backport_pull_request_for_version(related_issues, version)
           system("decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=#{version} --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false", exception: true)
+          system("bundle exec rubocop -A")
+          system("bundle exec erblint -A")
+          system("git commit -a -m 'Fix linter automatic offenses'")
         rescue RuntimeError => e
           puts e.message
           create_backport_issue(version)
