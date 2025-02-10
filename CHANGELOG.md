@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.0] - 2025-02-10
 
+### Changed
+
+- Update ruby version from 2.7.5 to 3.0.2
+
 ### Fixed
 
 -  Make directory check compatible with latest versions of ruby (#11)
