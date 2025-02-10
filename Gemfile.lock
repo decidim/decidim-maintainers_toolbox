@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-maintainers_toolbox (0.3.0)
+    decidim-maintainers_toolbox (0.4.0)
       activesupport (~> 6.1.7)
       faraday (~> 1.10)
       ruby-progressbar (~> 1.7)
@@ -88,4 +88,4 @@ DEPENDENCIES
   webmock (~> 3.18)
 
 BUNDLED WITH
-   2.4.10
+   2.5.22

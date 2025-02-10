@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     "homepage_uri" => "https://decidim.org",
     "source_code_uri" => "https://github.com/decidim/decidim"
   }
-  spec.required_ruby_version = ">= 2.7.5"
+  spec.required_ruby_version = ">= 3.0.2"
 
   spec.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").select do |f|
