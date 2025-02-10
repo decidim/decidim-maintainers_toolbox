@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-maintainers_toolbox (0.5.0)
+    decidim-maintainers_toolbox (0.6.0)
       activesupport (~> 6.1.7)
       faraday (~> 1.10)
       ruby-progressbar (~> 1.7)
