@@ -45,7 +45,7 @@ module Decidim
 
           run("bin/rake bundle")
           run("npm install")
-          run("bin/rake webpack") if Dir.exists?("decidim_app-design")
+          run("bin/rake webpack") if Dir.exist?("decidim_app-design")
 
           check_tests
 
