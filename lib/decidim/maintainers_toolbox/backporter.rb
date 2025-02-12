@@ -9,11 +9,12 @@ module Decidim
       # @param pull_request_id [String] the ID of the pull request that we want to backport
       # @param version_number [String] the version number of the release that we want to make the backport to
       # @param exit_with_unstaged_changes [Boolean] wheter we should exit cowardly if there is any unstaged change
-      def initialize(token:, pull_request_id:, version_number:, exit_with_unstaged_changes:)
+      def initialize(token:, pull_request_id:, version_number:, exit_with_unstaged_changes:, with_console:)
         @token = token
         @pull_request_id = pull_request_id
         @version_number = version_number
         @exit_with_unstaged_changes = exit_with_unstaged_changes
+        @with_console = with_console
       end
 
       # Handles the different tasks to create a backport:
@@ -32,7 +33,7 @@ module Decidim
 
       private
 
-      attr_reader :token, :pull_request_id, :version_number, :exit_with_unstaged_changes
+      attr_reader :token, :pull_request_id, :version_number, :exit_with_unstaged_changes, :with_console
 
       # Asks the metadata for a given issue or pull request on GitHub API
       #
@@ -52,7 +53,8 @@ module Decidim
           pull_request_id: pull_request_id,
           release_branch: release_branch,
           backport_branch: backport_branch(metadata[:title]),
-          exit_with_unstaged_changes: exit_with_unstaged_changes
+          exit_with_unstaged_changes: exit_with_unstaged_changes,
+          with_console: with_console
         ).call
       end
 

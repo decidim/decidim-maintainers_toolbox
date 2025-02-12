@@ -9,6 +9,7 @@ RSpec.describe Decidim::MaintainersToolbox::Backporter do
   let(:pull_request_id) { 123 }
   let(:version_number) { "0.1" }
   let(:exit_with_unstaged_changes) { true }
+  let(:with_console) { true }
 
   describe ".backport_branch" do
     let(:pull_request_title) { "Hello world" }

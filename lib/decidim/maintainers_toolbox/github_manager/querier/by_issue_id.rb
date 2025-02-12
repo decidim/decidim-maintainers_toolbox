@@ -35,6 +35,9 @@ module Decidim
 
             {
               id: metadata["number"],
+              state: metadata["state"],
+              is_pull_request: metadata["pull_request"].present?,
+              is_merged: (metadata["pull_request"]["merged_at"].present? rescue false),
               title: metadata["title"],
               labels: labels,
               type: labels.select { |l| l.match(/^type: /) || l == "target: developer-experience" },
