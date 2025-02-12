@@ -224,14 +224,27 @@ As usual, we recommend that you have a full backup, of the database, application
 
 To update, follow these steps:
 
-### 1.1. Update your Gemfile
+### 1.1. Update your ruby version
+
+If you're using rbenv, this is done with the following commands:
+
+```console
+rbenv install 3.x.x
+rbenv local 3.x.x
+```
+
+You may need to change your `.ruby-version` file too.
+
+If not, you need to adapt it to your environment, for instance by changing the decidim docker image to use ruby:3.x.x.
+
+### 1.2. Update your Gemfile
 
 ```ruby
 gem "decidim", github: "decidim/decidim"
 gem "decidim-dev", github: "decidim/decidim"
 ```
 
-### 1.2. Run these commands
+### 1.3. Run these commands
 
 ```console
 bundle update decidim
@@ -239,7 +252,7 @@ bin/rails decidim:upgrade
 bin/rails db:migrate
 ```
 
-### 1.3. Follow the steps and commands detailed in these notes
+### 1.4. Follow the steps and commands detailed in these notes
 
 ## 2. General notes
 
