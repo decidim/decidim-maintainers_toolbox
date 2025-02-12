@@ -61,6 +61,9 @@ module Decidim
 
           if type_prs.any?
             type_prs.each do |_pr_title, data|
+              # Prevent throttling by GitHub REST API
+              sleep 1
+
               process_single_pr(data, type_data)
             end
           else

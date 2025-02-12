@@ -3,7 +3,7 @@
 require "decidim/maintainers_toolbox/action_backporter"
 require "webmock/rspec"
 
-describe Decidim::MaintainersToolbox::ActionBackporter do
+RSpec.describe Decidim::MaintainersToolbox::ActionBackporter do
 
   subject { described_class.new(token: token, pull_request_id: pull_request_id, exit_with_unstaged_changes: exit_with_unstaged_changes) }
 

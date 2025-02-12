@@ -2,7 +2,7 @@
 
 require "decidim/maintainers_toolbox/backports_reporter/csv_report"
 
-describe Decidim::MaintainersToolbox::BackportsReporter::CSVReport do
+RSpec.describe Decidim::MaintainersToolbox::BackportsReporter::CSVReport do
   subject { described_class.new(report: report, last_version_number: last_version_number).call }
 
   let(:report) do

@@ -3,7 +3,7 @@
 require "decidim/maintainers_toolbox/github_manager/querier"
 require "webmock/rspec"
 
-describe Decidim::MaintainersToolbox::GithubManager::Querier::ByQuery do
+RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::ByQuery do
   let(:querier) { described_class.new(token: @token, query: { title: "Fix whatever" }) }
 
   let(:title) { "Fix whatever" }
