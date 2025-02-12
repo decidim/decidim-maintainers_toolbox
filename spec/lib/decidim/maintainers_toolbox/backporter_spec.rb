@@ -3,7 +3,7 @@
 require "decidim/maintainers_toolbox/backporter"
 
 RSpec.describe Decidim::MaintainersToolbox::Backporter do
-  subject { described_class.new(token: token, pull_request_id: pull_request_id, version_number: version_number, exit_with_unstaged_changes: exit_with_unstaged_changes) }
+  subject { described_class.new(token: token, pull_request_id: pull_request_id, version_number: version_number, exit_with_unstaged_changes: exit_with_unstaged_changes, with_console: with_console) }
 
   let(:token) { "1234" }
   let(:pull_request_id) { 123 }
