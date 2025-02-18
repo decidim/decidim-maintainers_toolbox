@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "decidim/maintainers_toolbox/github_manager/querier"
+require "decidim/maintainers_toolbox/github_manager/querier/by_issue_id"
 require "webmock/rspec"
 
 RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::ByIssueId do
