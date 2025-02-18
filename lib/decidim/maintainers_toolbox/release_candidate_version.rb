@@ -23,7 +23,8 @@ module Decidim
       end
 
       def call
-        check_branch_and_version_sanity
+        check_brench_and_version_sanity
+        check_tests
 
         prepare_next_development_version
         prepare_next_release_candidate_version
@@ -127,8 +128,6 @@ module Decidim
 
         run("npm install")
         run("bin/rake webpack") if Dir.exist?("decidim_app-design")
-
-        check_tests
 
         generate_changelog
 
