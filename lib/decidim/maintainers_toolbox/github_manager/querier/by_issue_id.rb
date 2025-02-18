@@ -32,12 +32,14 @@ module Decidim
           # @return [Hash]
           def parse(metadata)
             labels = metadata["labels"].map { |l| l["name"] }.sort
+            is_pull_request = metadata.key?("pull_request")
+            is_merged = metadata.key?("pull_request") && metadata["pull_request"].key?("merged_at") && metadata["pull_request"]["merged_at"]
 
             {
               id: metadata["number"],
               state: metadata["state"],
-              is_pull_request: metadata["pull_request"].present?,
-              is_merged: (metadata["pull_request"]["merged_at"].present? rescue false),
+              is_pull_request: is_pull_request,
+              is_merged: is_merged,
               title: metadata["title"],
               labels: labels,
               type: labels.select { |l| l.match(/^type: /) || l == "target: developer-experience" },
