@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "fileutils"
+
 RSpec.shared_context "releaser repository" do
   let(:working_dir) { File.expand_path("../../..", __dir__) }
   let(:decidim_version) { "0.99.0.rc1" }
