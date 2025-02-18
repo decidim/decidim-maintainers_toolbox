@@ -23,7 +23,7 @@ module Decidim
       end
 
       def call
-        check_brench_and_version_sanity
+        check_branch_and_version_sanity
         check_tests
 
         prepare_next_development_version
