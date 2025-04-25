@@ -4,7 +4,7 @@ require "decidim/maintainers_toolbox/github_manager/querier"
 require "webmock/rspec"
 require "active_support/testing/time_helpers"
 
-describe Decidim::MaintainersToolbox::GithubManager::Querier::ByLabel do
+RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::ByLabel do
   include ActiveSupport::Testing::TimeHelpers
 
   let(:querier) { described_class.new(token: "abc", days_to_check_from: days_to_check_from) }
