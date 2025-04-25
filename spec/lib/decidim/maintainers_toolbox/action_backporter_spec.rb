@@ -93,7 +93,7 @@ RSpec.describe Decidim::MaintainersToolbox::ActionBackporter do
   describe ".extract_versions" do
     it "returns the versions" do
       allow(subject).to receive(:pull_request_metadata).and_return({ labels: ["type: fix", "release: v0.28", "release: v0.29"], is_merged: true })
-      expect(subject.send(:extract_versions)).to eq(["0.28", "0.29"])
+      expect(subject.send(:extract_versions)).to eq(["0.29", "0.28"])
       expect(subject.send(:extract_versions).size).to eq(2)
     end
 
