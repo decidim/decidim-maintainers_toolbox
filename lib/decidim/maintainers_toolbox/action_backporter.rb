@@ -65,7 +65,7 @@ module Decidim
 
         pull_request_metadata[:labels].map do |item|
           item.match(/release: v(\d+\.\d+)/) { |m| m[1] }
-        end.compact
+        end.compact.reverse
       end
 
       # Asks the metadata for a given issue or pull request on GitHub API
