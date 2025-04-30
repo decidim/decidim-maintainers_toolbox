@@ -32,6 +32,9 @@ module Decidim
           case @version_type
           when "rc"
             release = ReleaseCandidateVersion.new(token: @token, working_dir: @working_dir)
+          # Minor release process is the same as the Patch release process
+          when "minor"
+            release = ReleasePatchVersion.new(token: @token, working_dir: @working_dir)
           when "patch"
             release = ReleasePatchVersion.new(token: @token, working_dir: @working_dir)
           else
