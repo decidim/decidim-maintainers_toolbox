@@ -219,6 +219,9 @@ EOCHANGELOG
 
 ## 1. Upgrade notes
 
+NOTE: This is the draft for the releases notes. If you are an implementer or someone that is upgrading a Decidim installation, we recommend
+checking out the last version of this document in the [GitHub page for the releases of this branch](https://github.com/decidim/decidim/releases/).
+
 As usual, we recommend that you have a full backup, of the database, application code and static files.
 
 To update, follow these steps:
