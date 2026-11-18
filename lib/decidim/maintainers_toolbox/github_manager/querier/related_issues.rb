@@ -42,6 +42,7 @@ module Decidim
               {
                 id: issue["number"],
                 title: issue["title"].strip,
+                body: issue["body"],
                 state: issue.dig("pull_request", "merged_at").nil? ? issue["state"] : "merged"
               }
             end

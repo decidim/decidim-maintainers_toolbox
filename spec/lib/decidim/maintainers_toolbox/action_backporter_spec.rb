@@ -63,13 +63,40 @@ RSpec.describe Decidim::MaintainersToolbox::ActionBackporter do
       subject.call
     end
 
+    it "does not skip the creation when the only backport is from another pull request" do
+      allow(subject).to receive(:pull_request_metadata).and_return({ id: pull_request_id, title: "Fix whatever", labels: ["type: fix", "release: v0.28"], is_merged: true })
+      allow(subject).to receive(:extract_versions).and_return(["0.28"])
+      allow(subject).to receive(:related_issues).and_return(
+        [{ id: 456, title: 'Backport "Another fix" to v0.28', body: "Backport #999 to v0.28", state: "merged" }]
+      )
+
+      expect(subject).to receive(:system).with("decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=0.28 --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false", exception: true)
+
+      subject.call
+    end
+
+    it "skips the creation when the pull request is already backported" do
+      allow(subject).to receive(:pull_request_metadata).and_return({ id: pull_request_id, title: "Fix whatever", labels: ["type: fix", "release: v0.28"], is_merged: true })
+      allow(subject).to receive(:extract_versions).and_return(["0.28"])
+      allow(subject).to receive(:related_issues).and_return(
+        [
+          { id: 456, title: 'Backport "Another fix" to v0.28', body: "Backport #999 to v0.28", state: "merged" },
+          { id: 457, title: 'Backport "Fix whatever" to v0.28', body: "Backport #123 to v0.28", state: "merged" }
+        ]
+      )
+
+      expect(subject).not_to receive(:system)
+
+      subject.call
+    end
+
     it "skips the creation" do
       allow(subject).to receive(:pull_request_metadata).and_return({ labels: ["type: fix", "release: v0.28", "release: v0.29"], is_merged: true })
       allow(subject).to receive(:extract_versions).and_return(["0.28", "0.29"])
       allow(subject).to receive(:related_issues).and_return([{title: "Backport 0.28"}, {title: "Backport 0.29"}])
 
-      expect(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), "0.28").and_return({})
-      expect(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), "0.29").and_return({})
+      expect(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), kind_of(Hash), "0.28").and_return({})
+      expect(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), kind_of(Hash), "0.29").and_return({})
 
       subject.call
     end
@@ -78,8 +105,8 @@ RSpec.describe Decidim::MaintainersToolbox::ActionBackporter do
       allow(subject).to receive(:pull_request_metadata).and_return({ labels: ["type: fix", "release: v0.28", "release: v0.29"], is_merged: true })
       allow(subject).to receive(:extract_versions).and_return(["0.28", "0.29"])
       allow(subject).to receive(:related_issues).and_return([])
-      allow(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), "0.28").and_return(nil)
-      allow(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), "0.29").and_return(nil)
+      allow(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), kind_of(Hash), "0.28").and_return(nil)
+      allow(subject).to receive(:extract_backport_pull_request_for_version).with(kind_of(Array), kind_of(Hash), "0.29").and_return(nil)
 
       allow(subject).to receive(:system).and_raise(RuntimeError)
 

@@ -108,6 +108,60 @@ RSpec.describe Decidim::MaintainersToolbox::BackportsReporter::CLIReport do
           expect(subject).to eq response
         end
       end
+
+      context "when there is a backport from another pull request" do
+        let(:related_issues) do
+          [
+            { id: 9876, title: 'Backport "Another fix" to v0.27', body: "Backport #42 to v0.27", state: "merged" },
+            { id: 9877, title: 'Backport "Fix the world" to v0.27', body: "Backport #10234 to v0.27", state: "open" },
+            { id: 9878, title: 'Backport "Fix the world" to v0.26', body: "Backport #10234 to v0.26", state: "merged" }
+          ]
+        end
+
+        it "does not hide the row because of the other pull request backport" do
+          response = <<~RESPONSE
+            |   ID   |                                        Title                                        | Backport v0.27 | Backport v0.26 |
+            |--------|-------------------------------------------------------------------------------------|----------------|----------------|
+            | #10234 | Fix the world                                                                       |      \e[32m#9877\e[0m     |      \e[34m#9878\e[0m     |
+          RESPONSE
+          expect(subject).to eq response
+        end
+      end
+
+      context "when a backport from another pull request is open" do
+        let(:related_issues) do
+          [
+            { id: 9876, title: 'Backport "Another fix" to v0.27', body: "Backport #42 to v0.27", state: "open" },
+            { id: 9875, title: 'Backport "Fix the world" to v0.27', body: "Backport #10234 to v0.27", state: "merged" },
+            { id: 9878, title: 'Backport "Fix the world" to v0.26', body: "Backport #10234 to v0.26", state: "merged" }
+          ]
+        end
+
+        it "hides the row when the pull request is fully backported" do
+          response = <<~RESPONSE
+            |   ID   |                                        Title                                        | Backport v0.27 | Backport v0.26 |
+            |--------|-------------------------------------------------------------------------------------|----------------|----------------|
+          RESPONSE
+          expect(subject).to eq response
+        end
+      end
+
+      context "when the backport is only identified by the body" do
+        let(:related_issues) do
+          [
+            { id: 9876, title: "Backport of an old fix to v0.26", body: "Backport #10234 to v0.26", state: "merged" }
+          ]
+        end
+
+        it "uses the body to relate the backport with the pull request" do
+          response = <<~RESPONSE
+            |   ID   |                                        Title                                        | Backport v0.27 | Backport v0.26 |
+            |--------|-------------------------------------------------------------------------------------|----------------|----------------|
+            | #10234 | Fix the world                                                                       |      None      |      \e[34m#9876\e[0m     |
+          RESPONSE
+          expect(subject).to eq response
+        end
+      end
     end
   end
 end

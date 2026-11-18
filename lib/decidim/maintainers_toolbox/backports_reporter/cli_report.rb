@@ -18,16 +18,16 @@ module Decidim
         def output_line(line)
           output = "| ##{line[:id].to_s.center(5)} "
           output += "| #{line[:title].truncate(83).ljust(84, " ")}"
-          output += "| #{format_backport(line[:related_issues], "v#{last_version_number}")}"
-          output += "| #{format_backport(line[:related_issues], "v#{penultimate_version_number}")}|\n"
+          output += "| #{format_backport(line, "v#{last_version_number}")}"
+          output += "| #{format_backport(line, "v#{penultimate_version_number}")}|\n"
           output
         end
 
-        def format_backport(related_issues, version)
+        def format_backport(line, version)
           none = "None".center(15, " ")
-          return none if related_issues.empty?
+          return none if line[:related_issues].empty?
 
-          pull_request = extract_backport_pull_request_for_version(related_issues, version)
+          pull_request = extract_backport_pull_request_for_version(line, version)
           return none if pull_request.nil?
 
           "\e[#{state_color(pull_request[:state])}m##{pull_request[:id]}\e[0m".center(24, " ")
