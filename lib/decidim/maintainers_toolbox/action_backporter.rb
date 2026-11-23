@@ -3,10 +3,13 @@
 require_relative "github_manager/querier"
 require_relative "github_manager/poster"
 require_relative "git_backport_manager"
+require_relative "backports_helper"
 
 module Decidim
   module MaintainersToolbox
     class ActionBackporter
+      include Decidim::MaintainersToolbox::BackportsHelper
+
       class InvalidMetadataError < StandardError; end
 
       DECIDIM_MAINTAINERS = ["alecslupu", "andreslucena"]
@@ -26,7 +29,7 @@ module Decidim
         exit_with_errors("The requested PR #{pull_request_id} cannot be backported") if pull_request_metadata[:labels].include?("no-backport")
 
         extract_versions.each do |version|
-          next if extract_backport_pull_request_for_version(related_issues, version)
+          next if extract_backport_pull_request_for_version(related_issues, pull_request_metadata, version)
           system("decidim-backporter --github_token=#{token} --pull_request_id=#{pull_request_id} --version_number=#{version} --exit_with_unstaged_changes=#{exit_with_unstaged_changes} --with-console=false", exception: true)
         rescue RuntimeError => e
           puts e.message
@@ -50,14 +53,13 @@ module Decidim
         Faraday.post(uri, some_params.to_json, { Authorization: "token #{token}" })
       end
 
-      # same method exists in lib/decidim/maintainers_toolbox/backports_reporter/report.rb
-      def extract_backport_pull_request_for_version(related_issues, version)
-        related_issues = related_issues.select do |pull_request|
-          pull_request[:title].start_with?("Backport") && pull_request[:title].include?(version)
-        end
-        return if related_issues.empty?
-
-        related_issues.first
+      # Extracts the backport Pull Request for the given version
+      #
+      # @return [Hash, nil]
+      def extract_backport_pull_request_for_version(related_issues, base_pull_request, version)
+        related_issues
+          .select { |related_issue| backport_of_pull_request?(related_issue, base_pull_request, version) }
+          .min_by { |pull_request| backport_state_priority(pull_request[:state]) }
       end
 
       def extract_versions

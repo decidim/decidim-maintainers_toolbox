@@ -7,8 +7,8 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
   let(:querier) { described_class.new(token: "abc", issue_id: 12_345) }
   let(:response) do
     [
-      { id: 456, title: "Backport 'Fix whatever' to v0.1", state: "merged" },
-      { id: 457, title: "Backport 'Fix whatever' to v0.2", state: "merged" }
+      { id: 456, title: "Backport 'Fix whatever' to v0.1", body: "Backport #123 to v0.1", state: "merged" },
+      { id: 457, title: "Backport 'Fix whatever' to v0.2", body: "Backport #123 to v0.2", state: "merged" }
     ]
   end
   let(:stubbed_body) do
@@ -17,13 +17,13 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
         {
           "event": "cross-referenced",
           "source": {
-            "issue": { "number": 456, "title": "Backport 'Fix whatever' to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
+            "issue": { "number": 456, "title": "Backport 'Fix whatever' to v0.1", "body": "Backport #123 to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
           }
         },
         {
           "event": "cross-referenced",
           "source": {
-            "issue": { "number": 457, "title": "Backport 'Fix whatever' to v0.2", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
+            "issue": { "number": 457, "title": "Backport 'Fix whatever' to v0.2", "body": "Backport #123 to v0.2", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
           }
         }
       ]
@@ -38,8 +38,8 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
   describe ".call" do
     let(:response) do
       [
-        { id: 456, title: "Backport 'Fix whatever' to v0.1", state: "merged" },
-        { id: 457, title: "Backport 'Fix whatever' to v0.2", state: "merged" }
+        { id: 456, title: "Backport 'Fix whatever' to v0.1", body: "Backport #123 to v0.1", state: "merged" },
+        { id: 457, title: "Backport 'Fix whatever' to v0.2", body: "Backport #123 to v0.2", state: "merged" }
       ]
     end
 
@@ -55,13 +55,13 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
           {
             "event": "cross-referenced",
             "source": {
-              "issue": { "number": 456, "title": "Backport 'Fix whatever' to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
+              "issue": { "number": 456, "title": "Backport 'Fix whatever' to v0.1", "body": "Backport #123 to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
             }
           },
           {
             "event": "cross-referenced",
             "source": {
-              "issue": { "number": 457, "title": "Backport 'Fix whatever' to v0.1", "state": "merged", "repository": { "full_name": "a_decidim_fork/decidim" } }
+              "issue": { "number": 457, "title": "Backport 'Fix whatever' to v0.1", "body": "Backport #123 to v0.1", "state": "merged", "repository": { "full_name": "a_decidim_fork/decidim" } }
             }
           }
         ]
@@ -69,7 +69,7 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
     end
     let(:response) do
       [
-        { id: 456, title: "Backport 'Fix whatever' to v0.1", state: "merged" }
+        { id: 456, title: "Backport 'Fix whatever' to v0.1", body: "Backport #123 to v0.1", state: "merged" }
       ]
     end
 
@@ -85,13 +85,13 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
           {
             "event": "cross-referenced",
             "source": {
-              "issue": { "number": 456, "title": "  Backport 'Fix title with leading spaces' to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
+              "issue": { "number": 456, "title": "  Backport 'Fix title with leading spaces' to v0.1", "body": "Backport #123 to v0.1", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
             }
           },
           {
             "event": "cross-referenced",
             "source": {
-              "issue": { "number": 457, "title": "Backport 'Fix title with trailing spaces' to v0.2   ", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
+              "issue": { "number": 457, "title": "Backport 'Fix title with trailing spaces' to v0.2   ", "body": "Backport #123 to v0.2", "state": "merged", "repository": { "full_name": "decidim/decidim" } }
             }
           }
         ]
@@ -99,8 +99,8 @@ RSpec.describe Decidim::MaintainersToolbox::GithubManager::Querier::RelatedIssue
     end
     let(:response) do
       [
-        { id: 456, title: "Backport 'Fix title with leading spaces' to v0.1", state: "merged" },
-        { id: 457, title: "Backport 'Fix title with trailing spaces' to v0.2", state: "merged" }
+        { id: 456, title: "Backport 'Fix title with leading spaces' to v0.1", body: "Backport #123 to v0.1", state: "merged" },
+        { id: 457, title: "Backport 'Fix title with trailing spaces' to v0.2", body: "Backport #123 to v0.2", state: "merged" }
       ]
     end
 

@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+require_relative "../backports_helper"
+
 module Decidim
   module MaintainersToolbox
     module BackportsReporter
       # Abstract class for the different formats
       class Report
+        include Decidim::MaintainersToolbox::BackportsHelper
+
         attr_reader :report, :last_version_number
 
         def initialize(report:, last_version_number:)
@@ -27,7 +31,7 @@ module Decidim
         def output_report
           output = output_head
           report.each do |line|
-            next if backports_merged?(line[:related_issues])
+            next if backports_merged?(line)
 
             output += output_line(line)
           end
@@ -42,20 +46,17 @@ module Decidim
           raise "Called abstract method: output_line"
         end
 
-        def extract_backport_pull_request_for_version(related_issues, version)
-          related_issues = related_issues.select do |pull_request|
-            pull_request[:title].start_with?("Backport") && pull_request[:title].include?(version)
-          end
-          return if related_issues.empty?
-
-          related_issues.first
+        def extract_backport_pull_request_for_version(line, version)
+          line[:related_issues]
+            .select { |related_issue| backport_of_pull_request?(related_issue, line, version) }
+            .min_by { |pull_request| backport_state_priority(pull_request[:state]) }
         end
 
-        def backports_merged?(related_issues)
-          return if related_issues.empty?
+        def backports_merged?(line)
+          return if line[:related_issues].empty?
 
-          latest_pr = extract_backport_pull_request_for_version(related_issues, "v#{last_version_number}")
-          penultimate_pr = extract_backport_pull_request_for_version(related_issues, "v#{penultimate_version_number}")
+          latest_pr = extract_backport_pull_request_for_version(line, "v#{last_version_number}")
+          penultimate_pr = extract_backport_pull_request_for_version(line, "v#{penultimate_version_number}")
 
           return unless [latest_pr, penultimate_pr].all?
 
